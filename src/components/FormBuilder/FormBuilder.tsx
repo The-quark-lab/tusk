@@ -318,7 +318,14 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
               </div>
             </>
           ) : (
-            <ThemePanel theme={theme} onChange={setTheme} />
+            <div className={styles.themeComingSoon}>
+              <Palette size={48} className={styles.comingSoonIcon} />
+              <h3>Theme Engine</h3>
+              <span className={styles.comingSoonBadge}>Coming Soon</span>
+              <p>
+                Advanced brand assets, customized CSS stylesheets, and pixel-perfect interactive styling controls are coming in the next release.
+              </p>
+            </div>
           )}
         </aside>
 

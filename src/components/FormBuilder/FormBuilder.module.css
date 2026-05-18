@@ -446,3 +446,46 @@
   }
   .toolBtn span { display: none; }
 }
+
+.themeComingSoon {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  gap: 1.25rem;
+}
+
+.comingSoonIcon {
+  color: var(--accent-primary);
+  opacity: 0.8;
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+.themeComingSoon h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: -0.5rem;
+}
+
+.comingSoonBadge {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--accent-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.themeComingSoon p {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
