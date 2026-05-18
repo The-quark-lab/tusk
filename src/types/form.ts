@@ -20,6 +20,27 @@ export interface FormField {
   isPrivate?: boolean;
 }
 
+export interface FormTheme {
+  accentColor: string;
+  backgroundColor: string;
+  backgroundType: 'solid' | 'gradient' | 'image';
+  backgroundGradient?: string;
+  backgroundImageBlobId?: string;
+  fontFamily: 'Inter' | 'Outfit' | 'DM Sans' | 'Space Grotesk';
+  buttonStyle: 'rounded' | 'pill' | 'sharp';
+  coverImageBlobId?: string;
+  logoText?: string;
+}
+
+export const DEFAULT_THEME: FormTheme = {
+  accentColor: '#7c3aed',
+  backgroundColor: '#0f0f17',
+  backgroundType: 'gradient',
+  backgroundGradient: '135deg, #0f0f17 0%, #1a0533 100%',
+  fontFamily: 'Inter',
+  buttonStyle: 'rounded',
+};
+
 export interface FormSchema {
   id: string;
   title: string;
@@ -34,6 +55,7 @@ export interface FormSchema {
   createdAt?: number;
   txDigest?: string;
   ephemeralKey?: string;
+  theme?: FormTheme;
 }
 
 export interface ManifestEntry {
@@ -63,4 +85,3 @@ export interface FormsIndexEntry {
   manifestBlobId: string;
   formObjectId: string;
 }
-

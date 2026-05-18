@@ -1,0 +1,194 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.colorDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.colorDot:hover {
+  transform: scale(1.2);
+}
+
+.colorPicker {
+  width: 32px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--surface-secondary, rgba(255,255,255,0.04));
+  border-radius: 8px;
+  padding: 0.25rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.activeTab {
+  background: var(--accent-primary, #7c3aed);
+  color: #fff;
+}
+
+.gradientRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gradientArrow {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.uploadBtn:hover {
+  border-color: var(--accent-primary, #7c3aed);
+  color: var(--text-primary);
+}
+
+.uploadBtn input[type="file"] {
+  display: none;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.optionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.optionBtn {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.optionBtn:hover {
+  border-color: var(--accent-primary, #7c3aed);
+  color: var(--text-primary);
+}
+
+.activeOption {
+  border-color: var(--accent-primary, #7c3aed);
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--text-primary);
+}
+
+.textInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: var(--accent-primary, #7c3aed);
+}
+
+.resetBtn {
+  margin-top: auto;
+  padding: 0.4rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.resetBtn:hover {
+  color: var(--text-primary);
+}
+
+.colorPickerWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.colorValue {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}

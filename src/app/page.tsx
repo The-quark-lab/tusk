@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { FormPlayer } from "@/components/FormPlayer/FormPlayer";
 import { FormBuilder } from "@/components/FormBuilder/FormBuilder";
 import { AdminDashboard } from "@/components/AdminDashboard/AdminDashboard";
-import { FormSchema, ManifestEntry, FormsIndexEntry } from "@/types/form";
+import { AiFormBuilder } from "@/components/AiFormBuilder/AiFormBuilder";
+import { FormSchema, ManifestEntry, FormsIndexEntry, FormField } from "@/types/form";
 import { encryptWithSeal } from "@/lib/seal";
 import { uploadMediaToWalrus, uploadToWalrus, downloadFromWalrus } from "@/lib/walrus";
 import { getStoredForms, updateStoredForm, setStoredFormsCache } from "@/lib/storage";
@@ -36,7 +37,7 @@ import {
 import { clsx } from "clsx";
 import styles from "./page.module.css";
 
-type ViewState = "landing" | "builder" | "player" | "admin" | "shared";
+type ViewState = "landing" | "builder" | "player" | "admin" | "shared" | "ai-builder";
 
 export default function Home() {
   const account = useCurrentAccount();
@@ -51,6 +52,7 @@ export default function Home() {
   const [justCreatedForm, setJustCreatedForm] = useState<FormSchema | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const [ephemeralKey, setEphemeralKey] = useState<string | null>(null);
+  const [aiFields, setAiFields] = useState<{ fields: FormField[]; title: string } | null>(null);
 
   // ---- Load forms from Walrus registry on mount ----
   const refreshFormsFromRegistry = useCallback(async () => {
@@ -122,21 +124,34 @@ export default function Home() {
       return;
     }
 
-    if (blobId) {
+    if (blobId || formObjId) {
       setLoadingForm(true);
       setFormError(null);
 
       (async () => {
         try {
-          const schema = await downloadFromWalrus<FormSchema>(blobId);
+          let resolvedBlobId = blobId || "";
+          let manifestBlobId = urlManifestBlobId || "";
+          const resolvedFormObjId = formObjId || "";
 
-          // Get the authoritative manifestBlobId from Sui if formObjectId is available
-          let manifestBlobId = schema.manifestBlobId || urlManifestBlobId || "";
-          const resolvedFormObjId = formObjId || schema.formObjectId || "";
-
+          // Resolve missing blob details directly from Sui if formObjId is available
           if (resolvedFormObjId) {
             const onChain = await getFormObject(resolvedFormObjId);
-            if (onChain?.manifest_blob_id) manifestBlobId = onChain.manifest_blob_id;
+            if (onChain) {
+              if (onChain.schema_blob_id) resolvedBlobId = onChain.schema_blob_id;
+              if (onChain.manifest_blob_id) manifestBlobId = onChain.manifest_blob_id;
+            }
+          }
+
+          if (!resolvedBlobId) {
+            throw new Error("Could not resolve Form Schema Blob ID from Sui.");
+          }
+
+          const { downloadFromWalrus } = await import('@/lib/walrus');
+          const schema = await downloadFromWalrus<FormSchema>(resolvedBlobId);
+
+          if (!manifestBlobId && schema.manifestBlobId) {
+            manifestBlobId = schema.manifestBlobId;
           }
 
           if (!manifestBlobId) {
@@ -145,7 +160,7 @@ export default function Home() {
 
           const fullSchema: FormSchema = {
             ...schema,
-            schemaBlobId: blobId,
+            schemaBlobId: resolvedBlobId,
             manifestBlobId,
             formObjectId: resolvedFormObjId || undefined,
           };
@@ -338,8 +353,28 @@ export default function Home() {
     );
   }
 
+  if (view === "ai-builder") {
+    return (
+      <AiFormBuilder
+        onBack={() => setView("builder")}
+        onFieldsGenerated={(fields, title) => {
+          setAiFields({ fields, title });
+          setView("builder");
+        }}
+      />
+    );
+  }
+
   if (view === "builder") {
-    return <FormBuilder onSaved={handleSavedForm} onBack={() => setView("landing")} />;
+    return (
+      <FormBuilder
+        onSaved={handleSavedForm}
+        onBack={() => setView("landing")}
+        onOpenAiBuilder={() => setView("ai-builder")}
+        initialFields={aiFields?.fields}
+        initialTitle={aiFields?.title}
+      />
+    );
   }
 
   if (view === "shared" && justCreatedForm) {
@@ -411,6 +446,8 @@ export default function Home() {
         onSelectForm={setActiveFormId}
         onBack={() => setView("landing")}
         onFormsRefresh={refreshFormsFromRegistry}
+        onCreateNew={() => setView("builder")}
+        connectedAddress={account?.address}
       />
     );
   }
@@ -427,8 +464,8 @@ export default function Home() {
         </div>
         <div className={styles.navLinks}>
           <a href="#features">Features</a>
-          <button className={styles.navBtn} onClick={() => setView("admin")}>Admin</button>
-          <Button variant="glass" size="sm" onClick={() => setView("builder")}>Launch App</Button>
+          <button className={styles.navBtn} onClick={() => setView("admin")}>Dashboard</button>
+          <Button variant="glass" size="sm" onClick={() => setView("admin")}>Launch App</Button>
         </div>
       </nav>
 
@@ -458,13 +495,8 @@ export default function Home() {
             <Button size="lg" className={styles.primaryCta} onClick={() => setView("builder")}>
               Create a Form <ArrowRight size={18} />
             </Button>
-            <Button variant="outline" size="lg" onClick={() => {
-              if (forms.length > 0) {
-                setActiveFormId(forms[0].id);
-                setView("player");
-              }
-            }}>
-              Open Form
+            <Button variant="outline" size="lg" onClick={() => setView("admin")}>
+              View Dashboard
             </Button>
           </div>
         </motion.header>

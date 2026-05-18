@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormSchema, FormField } from '@/types/form';
 import { Button } from '@/components/ui/Button';
 import { ChevronRight, ChevronLeft, Check, Upload, Video, Square } from 'lucide-react';
 import styles from './FormPlayer.module.css';
+
+const AGGREGATOR_URL = process.env.NEXT_PUBLIC_WALRUS_AGGREGATOR_URL || 'https://aggregator.walrus-testnet.walrus.space';
 
 interface FormPlayerProps {
   schema: FormSchema;
@@ -14,12 +16,35 @@ interface FormPlayerProps {
 }
 
 export const FormPlayer: React.FC<FormPlayerProps> = ({ schema, onSubmit, onBack }) => {
-  const [currentIndex, setCurrentIndex] = useState(-1); // -1 for Welcome screen
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const [responses, setResponses] = useState<Record<string, unknown>>({});
   const [direction, setDirection] = useState(1);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+
+  // Build CSS custom properties from the form's theme
+  const themeVars = useMemo(() => {
+    const t = schema.theme;
+    if (!t) return {};
+    const vars: React.CSSProperties & Record<string, string> = {
+      '--player-accent': t.accentColor,
+      '--player-font': t.fontFamily,
+    };
+    if (t.backgroundType === 'solid') {
+      vars['--player-bg'] = t.backgroundColor;
+    } else if (t.backgroundType === 'gradient') {
+      vars['--player-bg'] = `linear-gradient(${t.backgroundGradient || `135deg, ${t.backgroundColor} 0%, #1a0533 100%`})`;
+    } else if (t.backgroundType === 'image' && t.backgroundImageBlobId) {
+      vars['--player-bg'] = `url(${AGGREGATOR_URL}/v1/blobs/${t.backgroundImageBlobId}) center/cover no-repeat`;
+    }
+    if (t.buttonStyle === 'pill') vars['--player-btn-radius'] = '999px';
+    else if (t.buttonStyle === 'sharp') vars['--player-btn-radius'] = '4px';
+    else vars['--player-btn-radius'] = '10px';
+    return vars;
+  }, [schema.theme]);
+
+  const coverBlobId = schema.theme?.coverImageBlobId;
 
   const totalFields = schema.fields.length;
   const progress = currentIndex === -1 ? 0 : ((currentIndex + 1) / totalFields) * 100;
@@ -82,9 +107,21 @@ export const FormPlayer: React.FC<FormPlayerProps> = ({ schema, onSubmit, onBack
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.progressBar} style={{ width: `${progress}%` }} />
+    <div className={styles.container} style={themeVars as React.CSSProperties}>
+      {coverBlobId && (
+        <div
+          className={styles.cover}
+          style={{ backgroundImage: `url(${AGGREGATOR_URL}/v1/blobs/${coverBlobId})` }}
+        />
+      )}
+      <div className={styles.progressBar} style={{ width: `${progress}%`, background: schema.theme?.accentColor || undefined }} />
       
+      {schema.theme?.logoText && (
+        <header className={styles.brandHeader}>
+          <span className={styles.brandLogoText}>{schema.theme.logoText}</span>
+        </header>
+      )}
+
       <div className={styles.content}>
         <AnimatePresence mode="wait" custom={direction}>
           {isComplete ? (

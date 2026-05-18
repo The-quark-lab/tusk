@@ -17,13 +17,18 @@ export interface WalrusStoreResponse {
   };
 }
 
-export async function uploadToWalrus(data: unknown, epochs = 1, retries = 3): Promise<string> {
+export async function uploadToWalrus(data: unknown, epochs = 53, retries = 3): Promise<string> {
   const body = typeof data === 'string' ? data : JSON.stringify(data);
   const blob = new Blob([body], { type: 'application/json' });
+  const isBrowser = typeof window !== 'undefined';
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(`${PUBLISHER_URL}/v1/blobs?epochs=${epochs}`, {
+      const url = isBrowser 
+        ? `/api/walrus?epochs=${epochs}` 
+        : `${PUBLISHER_URL}/v1/blobs?epochs=${epochs}`;
+
+      const response = await fetch(url, {
         method: 'PUT',
         body: blob,
       });
@@ -53,9 +58,15 @@ export async function uploadToWalrus(data: unknown, epochs = 1, retries = 3): Pr
 }
 
 export async function downloadFromWalrus<T>(blobId: string, retries = 3): Promise<T> {
+  const isBrowser = typeof window !== 'undefined';
+
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(`${AGGREGATOR_URL}/v1/blobs/${blobId}`);
+      const url = isBrowser 
+        ? `/api/walrus?blobId=${blobId}` 
+        : `${AGGREGATOR_URL}/v1/blobs/${blobId}`;
+
+      const response = await fetch(url);
 
       if (!response.ok) {
         const text = await response.text().catch(() => "");
@@ -78,10 +89,16 @@ export async function downloadFromWalrus<T>(blobId: string, retries = 3): Promis
   throw new Error("Walrus download unreachable");
 }
 
-export async function uploadMediaToWalrus(file: File | Blob, epochs = 1, retries = 3): Promise<string> {
+export async function uploadMediaToWalrus(file: File | Blob, epochs = 53, retries = 3): Promise<string> {
+  const isBrowser = typeof window !== 'undefined';
+
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(`${PUBLISHER_URL}/v1/blobs?epochs=${epochs}`, {
+      const url = isBrowser 
+        ? `/api/walrus?epochs=${epochs}` 
+        : `${PUBLISHER_URL}/v1/blobs?epochs=${epochs}`;
+
+      const response = await fetch(url, {
         method: 'PUT',
         body: file,
       });
@@ -116,7 +133,7 @@ export async function uploadMediaToWalrus(file: File | Blob, epochs = 1, retries
  */
 export async function uploadAdminMeta(
   store: import('@/types/form').AdminMetaStore,
-  epochs = 5,
+  epochs = 53,
 ): Promise<string> {
   return uploadToWalrus(store, epochs);
 }

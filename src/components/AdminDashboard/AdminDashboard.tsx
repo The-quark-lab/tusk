@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   Link,
   RefreshCw,
+  Plus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import styles from './AdminDashboard.module.css';
@@ -33,6 +34,8 @@ interface AdminDashboardProps {
   onSelectForm: (id: string) => void;
   onBack: () => void;
   onFormsRefresh: () => Promise<void>;
+  onCreateNew: () => void;
+  connectedAddress?: string;
 }
 
 const DEFAULT_META: AdminMeta = {
@@ -48,6 +51,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onSelectForm,
   onBack,
   onFormsRefresh,
+  onCreateNew,
+  connectedAddress,
 }) => {
   const { mutateAsync: signAndExecuteAsync } = useSignAndExecuteTransaction();
 
@@ -60,7 +65,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [savingMeta, setSavingMeta] = useState(false);
   const [localNotes, setLocalNotes] = useState<string>('');
 
-  const selectedForm = forms.find((f) => f.id === selectedFormId) || forms[0] || null;
+  const normalizeAddress = (addr: string) => {
+    if (!addr) return "";
+    let clean = addr.toLowerCase().trim();
+    if (clean.startsWith("0x")) clean = clean.substring(2);
+    return "0x" + clean.padStart(64, "0");
+  };
+
+  const userForms = React.useMemo(() => {
+    if (!connectedAddress) return [];
+    const normUser = normalizeAddress(connectedAddress);
+    return forms.filter(f => f.creator && normalizeAddress(f.creator) === normUser);
+  }, [forms, connectedAddress]);
+
+  const selectedForm = userForms.find((f) => f.id === selectedFormId) || userForms[0] || null;
 
   // ---- Load manifest + admin meta from Walrus when form changes ----
   const loadFormData = useCallback(async (form: FormSchema) => {
@@ -237,23 +255,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <button className={styles.backBtn} onClick={onBack} type="button">
             <ArrowLeft size={16} /> Back
           </button>
-          <h2>Admin Dashboard</h2>
+          <h2>Dashboard</h2>
           <p>Walrus-native form management</p>
+          <Button fullWidth onClick={onCreateNew} type="button" style={{ marginTop: '0.75rem' }}>
+            <Plus size={16} /> New Form
+          </Button>
           <div className={styles.walletRow}>
             <ConnectButton />
           </div>
         </div>
         <nav className={styles.formNav}>
-          {forms.length === 0 ? (
+          {userForms.length === 0 ? (
             <div className={styles.connectPromptSidebar}>
               <BarChart3 size={24} />
-              <p>No forms found. Create one to get started.</p>
-              <Button variant="outline" size="sm" onClick={onFormsRefresh}>
-                <RefreshCw size={14} /> Refresh
-              </Button>
+              {connectedAddress ? (
+                <>
+                  <p>No forms found for this wallet. Create one to get started!</p>
+                  <Button variant="outline" size="sm" onClick={onFormsRefresh} style={{ marginTop: '0.5rem' }}>
+                    <RefreshCw size={14} /> Refresh
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p>Connect your wallet to see your forms.</p>
+                  <div className={styles.walletRow} style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '0.5rem' }}>
+                    <ConnectButton />
+                  </div>
+                </>
+              )}
             </div>
           ) : (
-            forms.map((form) => (
+            userForms.map((form) => (
               <button
                 key={form.id}
                 className={clsx(styles.formTab, selectedFormId === form.id && styles.activeTab)}

@@ -3,8 +3,17 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  background: var(--bg-primary);
+  background: var(--player-bg, var(--bg-primary));
+  font-family: var(--player-font, 'Inter'), sans-serif;
   z-index: 100;
+}
+
+.cover {
+  width: 100%;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
 }
 
 .progressBar {
@@ -83,7 +92,7 @@
 }
 
 .textInput:focus, .textarea:focus {
-  border-color: var(--accent-primary);
+  border-color: var(--player-accent, var(--accent-primary));
 }
 
 .textarea {
@@ -124,7 +133,7 @@
   padding: 1rem 1.5rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--radius-md);
+  border-radius: var(--player-btn-radius, var(--radius-md));
   color: var(--text-primary);
   min-height: 3.5rem;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -133,20 +142,20 @@
 
 .choiceBtn:hover, .choiceBtn:focus-visible {
   background: var(--bg-tertiary);
-  border-color: var(--accent-secondary);
+  border-color: var(--player-accent, var(--accent-secondary));
   outline: none;
 }
 
 .activeChoice {
-  background: var(--accent-glow);
-  border-color: var(--accent-secondary);
-  box-shadow: var(--shadow-glow);
+  background: color-mix(in srgb, var(--player-accent, #7c3aed) 15%, transparent);
+  border-color: var(--player-accent, var(--accent-secondary));
+  box-shadow: 0 0 15px color-mix(in srgb, var(--player-accent, #7c3aed) 30%, transparent);
 }
 
 .choiceKey {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--accent-secondary);
+  color: var(--player-accent, var(--accent-secondary));
   background: var(--bg-tertiary);
   width: 24px;
   height: 24px;
@@ -166,7 +175,7 @@
 .otherInput {
   background: transparent;
   border: none;
-  border-bottom: 2px solid var(--accent-secondary);
+  border-bottom: 2px solid var(--player-accent, var(--accent-secondary));
   font-size: 1.25rem;
   color: var(--text-primary);
   padding: 0.5rem 0;
@@ -182,7 +191,7 @@
   padding: 1.5rem 2rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--radius-lg);
+  border-radius: var(--player-btn-radius, var(--radius-lg));
   color: var(--text-primary);
   min-height: 4rem;
   transition: background 0.2s, border-color 0.2s;
@@ -192,13 +201,13 @@
 
 .confirmBtn:hover, .confirmBtn:focus-visible {
   background: var(--bg-tertiary);
-  border-color: var(--accent-secondary);
+  border-color: var(--player-accent, var(--accent-secondary));
   outline: none;
 }
 
 .activeConfirm {
-  background: var(--accent-glow);
-  border-color: var(--accent-secondary);
+  background: color-mix(in srgb, var(--player-accent, #7c3aed) 15%, transparent);
+  border-color: var(--player-accent, var(--accent-secondary));
 }
 
 .checkbox {
@@ -210,11 +219,11 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-tertiary);
-  color: var(--accent-secondary);
+  color: var(--player-accent, var(--accent-secondary));
 }
 
 .activeConfirm .checkbox {
-  border-color: var(--accent-secondary);
+  border-color: var(--player-accent, var(--accent-secondary));
   background: var(--bg-secondary);
 }
 
@@ -242,7 +251,7 @@
 }
 
 .uploadBox:hover, .uploadBox:focus-within {
-  border-color: var(--accent-secondary);
+  border-color: var(--player-accent, var(--accent-secondary));
   background: var(--bg-tertiary);
 }
 
@@ -303,4 +312,21 @@
   .progressBar, .star, .choiceBtn, .confirmBtn {
     transition: none;
   }
+}
+
+.brandHeader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 2rem 0;
+  z-index: 10;
+}
+
+.brandLogoText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--player-accent, var(--accent-secondary));
+  opacity: 0.85;
 }

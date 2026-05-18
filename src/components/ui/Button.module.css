@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-md);
+  border-radius: var(--player-btn-radius, var(--radius-md));
   font-weight: 500;
   min-height: 2.5rem;
   transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -25,19 +25,20 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--accent-secondary);
+  outline: 2px solid var(--player-accent, var(--accent-secondary));
   outline-offset: 2px;
 }
 
 /* Variants */
 .primary {
-  background: var(--accent-primary);
+  background: var(--player-accent, var(--accent-primary));
   color: white;
   box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--accent-secondary);
+  background: var(--player-accent, var(--accent-secondary));
+  filter: brightness(1.1);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
 }
 
@@ -73,8 +74,8 @@
 }
 
 .outline:hover:not(:disabled) {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+  border-color: var(--player-accent, var(--accent-primary));
+  color: var(--player-accent, var(--accent-primary));
 }
 
 /* Sizes */
