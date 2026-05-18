@@ -1,0 +1,355 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: 260px 1fr 340px;
+  height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.sidebarHeader h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.sidebarHeader p {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.formNav {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formTab {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  text-align: left;
+  min-height: 3.5rem;
+}
+
+.formTab:hover, .formTab:focus-visible {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.activeTab {
+  background: var(--bg-tertiary);
+  color: var(--accent-secondary);
+  border: 1px solid var(--border-primary);
+}
+
+.formTabInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.formTabTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.formTabSubs {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Main Area */
+.main {
+  padding: 2rem;
+  overflow-y: auto;
+  background: var(--bg-primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.headerInfo h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tableContainer {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 1rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border-primary);
+  transition: background 0.2s;
+}
+
+.table tr:hover td {
+  background: var(--bg-tertiary);
+}
+
+.activeRow td {
+  background: var(--bg-tertiary);
+}
+
+.address {
+  color: var(--accent-secondary);
+  font-family: monospace;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.inprogress { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.resolved { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+
+.secureBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #a855f7;
+}
+
+.publicBadge {
+  color: var(--text-tertiary);
+}
+
+/* Detail Panel */
+.detailPanel {
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.detailContent {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subActions {
+  display: flex;
+  gap: 1rem;
+  color: var(--text-tertiary);
+}
+
+.detailBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dataGroup label, .dataItem label, .notesSection label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.encryptedNotice {
+  padding: 2rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border: 1px dashed #a855f7;
+}
+
+.encryptedNotice h4 {
+  color: #a855f7;
+}
+
+.responseData {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dataItem p {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.notesSection textarea {
+  width: 100%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  color: var(--text-primary);
+  resize: none;
+  height: 100px;
+}
+
+.detailFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  min-height: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.backBtn:hover, .backBtn:focus-visible {
+  color: var(--text-primary);
+  outline: none;
+}
+
+.emptyState {
+  min-height: 18rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.walletRow {
+  margin-top: 0.75rem;
+}
+
+.connectPromptSidebar {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.statusSelect {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  min-height: 2.5rem;
+  padding: 0 0.5rem;
+}
+
+.statusSelect:focus-visible {
+  outline: 2px solid var(--accent-secondary);
+  outline-offset: 2px;
+}
+
+.rowButton {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.rowButton:hover, .rowButton:focus-visible {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.rewardBtn {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: black;
+  font-weight: 700;
+}
+
+.detailEmpty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-tertiary);
+  gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: 80px 1fr 300px;
+  }
+  .formTabInfo { display: none; }
+}

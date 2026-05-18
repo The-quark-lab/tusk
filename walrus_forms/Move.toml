@@ -1,0 +1,8 @@
+[package]
+name = "walrus_forms"
+edition = "2024"
+
+[dependencies]
+
+[addresses]
+walrus_forms = "0x0"
